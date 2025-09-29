@@ -3,38 +3,25 @@ import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 
 // Firebase config
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
+  apiKey: "AIzaSyAZzF2ullTCFUoLGtWGhr3WUr2RN9ZW8ag",
+  authDomain: "canvas-editor-4f4d6.firebaseapp.com",
+  projectId: "canvas-editor-4f4d6",
+  storageBucket: "canvas-editor-4f4d6.firebasestorage.app",
+  messagingSenderId: "671023402817",
+  appId: "1:671023402817:web:1d8717aed159d22f75dbc0",
+  measurementId: "G-ZH1GY1PJ33"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ------------------ Debounce Helper ------------------
-function debounce(fn, delay) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), delay);
-  };
-}
-
-
-// Original save function
-const saveSceneToDB = async (id, scene) => {
+// Save scene to Firestore
+export const saveScene = async (id, scene) => {
   await setDoc(doc(db, "scenes", id), { data: scene });
 };
 
-// Debounced version (e.g., 500ms delay)
-export const saveScene = debounce(saveSceneToDB, 500);
-
-// Load scene
+// Load scene from Firestore
 export const loadScene = async (id) => {
   const snap = await getDoc(doc(db, "scenes", id));
   return snap.exists() ? snap.data().data : null;
